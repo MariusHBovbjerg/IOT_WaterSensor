@@ -1,13 +1,21 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using IOT_WateringSensor.Data;
+using IOT_WateringSensor;
+using IOT_WateringSensor.Database;
+using IOT_WateringSensor.MQTT_Gøj;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.ConfigureServices();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+new Thread(_ =>
+{
+    var serviceCollection = builder.Services.BuildServiceProvider();
+    var handler = new MqttHandler(serviceCollection.GetRequiredService<WaterSensorDbContext>());
+    handler.Run_Server_With_Logging();
+}).Start();
 
 var app = builder.Build();
 
