@@ -8,9 +8,9 @@ class Program
 {
     
     private static Dictionary<Guid, int> _guids = new Dictionary<Guid, int> {
-        {Guid.Parse("0ddc7bef-865f-42ba-85b6-1de78b3df96f"), 9},
-        {Guid.Parse("b9d8a995-3328-4bc2-abeb-7c1106b1c172"), 3},
-        {Guid.Parse("2a7f264d-b158-4d10-b6a9-cc9b5dd8b726"), 1}};
+        {Guid.Parse("0ddc7bef-865f-42ba-85b6-1de78b3df96f"), 70},
+        {Guid.Parse("b9d8a995-3328-4bc2-abeb-7c1106b1c172"), 50},
+        {Guid.Parse("2a7f264d-b158-4d10-b6a9-cc9b5dd8b726"), 30}};
     
     public static async Task Main(string[] args)
     {
