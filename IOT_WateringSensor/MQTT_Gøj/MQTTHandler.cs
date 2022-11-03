@@ -40,7 +40,8 @@ public class MqttHandler
 
         await mqttServer.StartAsync();
         
-        Console.ReadLine();
+        var manualResetEvent = new ManualResetEvent(false);
+        manualResetEvent.WaitOne();
 
         // Stop and dispose the MQTT server if it is no longer needed!
         await mqttServer.StopAsync();
