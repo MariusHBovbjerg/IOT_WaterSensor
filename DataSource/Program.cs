@@ -29,7 +29,7 @@ class Program
 
             foreach (var guid in _guids)
             { 
-                var newMoisture = (int) Math.Clamp(guid.Value + ((double)random.Next(-100, 100) / 100), 0, 100);
+                var newMoisture = (int) Math.Clamp(Math.Round(guid.Value + ((double)random.Next(-100, 100) / 100)), 0, 100);
                 
                 _guids[guid.Key] = newMoisture;
                 
