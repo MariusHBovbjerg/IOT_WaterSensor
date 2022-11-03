@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOT_WateringSensor", "IOT_WateringSensor\IOT_WateringSensor.csproj", "{FC751201-5B7B-4757-80A8-2960F5A24460}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSource", "DataSource\DataSource.csproj", "{81A950B3-8355-4767-AAD3-BF4EB4E9BC3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{FC751201-5B7B-4757-80A8-2960F5A24460}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC751201-5B7B-4757-80A8-2960F5A24460}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC751201-5B7B-4757-80A8-2960F5A24460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A950B3-8355-4767-AAD3-BF4EB4E9BC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A950B3-8355-4767-AAD3-BF4EB4E9BC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A950B3-8355-4767-AAD3-BF4EB4E9BC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A950B3-8355-4767-AAD3-BF4EB4E9BC3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
