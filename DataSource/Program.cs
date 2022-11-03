@@ -33,16 +33,14 @@ class Program
 
             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
-            var json = JsonConvert.SerializeObject(new
-                { clientid = _guids[random.Next(0,9)], timestamp = DateTime.Now, Moisture = random.Next(0, 100) });
-
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic("water")
-                .WithPayload(json)
-                .Build();
-
-            await mqttClient.PublishAsync(message, CancellationToken.None);
-
+            foreach (var message in _guids.Select(guid => JsonConvert.SerializeObject(new
+                         { clientid = guid, timestamp = DateTime.Now, Moisture = random.Next(0, 100) })).Select(json => new MqttApplicationMessageBuilder()
+                         .WithTopic("water")
+                         .WithPayload(json)
+                         .Build()))
+            {
+                await mqttClient.PublishAsync(message, CancellationToken.None);
+            }
             await mqttClient.DisconnectAsync();
 
             Console.WriteLine("MQTT application message is published.");
