@@ -19,14 +19,6 @@ public class MqttHandler
     
     public async Task Run_Server_With_Logging()
     {
-        /*
-         * This sample starts a simple MQTT server and prints the logs to the output.
-         *
-         * IMPORTANT! Do not enable logging in live environment. It will decrease performance.
-         *
-         * See sample "Run_Minimal_Server" for more details.
-         */
-
         var mqttFactory = new MqttFactory();
 
         var mqttServerOptions = new MqttServerOptionsBuilder()
@@ -44,7 +36,6 @@ public class MqttHandler
         var manualResetEvent = new ManualResetEvent(false);
         manualResetEvent.WaitOne();
 
-        // Stop and dispose the MQTT server if it is no longer needed!
         await mqttServer.StopAsync();
     }
 
