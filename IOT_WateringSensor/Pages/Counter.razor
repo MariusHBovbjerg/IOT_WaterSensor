@@ -10,8 +10,8 @@
 
 <div>
 	<MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
-	<MudText Typo="Typo.h6">Selected portion of the chart: @Index</MudText>
-	<MudNumericField @bind-Value="DesiredElementsInChart" Label="Outlined" Variant="Variant.Outlined" Min="2" Max="50" />	
+	<MudText Typo="Typo.h6">Desired data points</MudText>
+	<MudNumericField @bind-Value="DesiredElementsInChart" Variant="Variant.Outlined" Min="2" Max="50"/>	
 </div>
 
 <MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
@@ -90,7 +90,7 @@
 
 		List<ChartSeries> newSeries = new List<ChartSeries>();
 
-		ChartData.ForEach(group => newSeries.Add(new ChartSeries() { Name = group.Name.ToString(), Data = group.SensorData.Select(data => (double)data.Moisture).ToArray() }));
+		ChartData.ForEach(group => newSeries.Add(new ChartSeries() { Name = group.Name.ToString().Split('-')[0], Data = group.SensorData.Select(data => (double)data.Moisture).ToArray() }));
 		var longestDataset = ChartData.Select(g => g.SensorData.Count()).Max();
 
 		// Make sure plot doesn't break if there is less data than the desired amount
@@ -108,7 +108,7 @@
 		//Interpolate between highest and lowest time reading in dataset and add x axis labels for it
 		for (var i = 0; i <= ElementsInChart; i++)
 		{
-			axis.Add(min.Add(interpolationSpan.Multiply(i)).ToString());
+			axis.Add(min.Add(interpolationSpan.Multiply(i)).ToLongTimeString());
 		}
 		
 		XAxisLabels = axis.ToArray();
