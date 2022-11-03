@@ -40,6 +40,7 @@ public class MqttHandler
 
         await mqttServer.StartAsync();
         
+        // Trick to keep the program running without busy waiting the thread
         var manualResetEvent = new ManualResetEvent(false);
         manualResetEvent.WaitOne();
 
