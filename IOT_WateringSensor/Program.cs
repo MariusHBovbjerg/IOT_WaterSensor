@@ -10,11 +10,11 @@ builder.Services.ConfigureServices();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-new Thread(_ =>
+new Thread(async _ =>
 {
     var serviceCollection = builder.Services.BuildServiceProvider();
     var handler = new MqttHandler(serviceCollection.GetRequiredService<WaterSensorDbContext>());
-    handler.Run_Server_With_Logging();
+    await handler.Run_Server_With_Logging();
 }).Start();
 
 var app = builder.Build();
