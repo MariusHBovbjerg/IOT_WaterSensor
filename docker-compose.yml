@@ -1,0 +1,28 @@
+volumes:
+  certs:
+  vhost:
+  html:
+  acme:
+
+
+services:
+
+  iotproject:
+    container_name: iotproject
+    image: ghcr.io/smell-ya-later/iot_watersensor:main
+    environment:
+      - "MSSQL_HOST=iotdb"
+      - "MSSQL_PORT=1433"
+    ports:
+      - 8005:80
+      - 1883:1883
+    depends_on:
+      - iotdb
+  iotdb:
+    container_name: iotprojectdb
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "yourStrong(!)Password"
+      ACCEPT_EULA: "Y"
+    expose:
+      - 1433
