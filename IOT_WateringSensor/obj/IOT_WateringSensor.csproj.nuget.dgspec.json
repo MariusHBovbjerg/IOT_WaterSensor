@@ -47,7 +47,7 @@
           "dependencies": {
             "MQTTnet": {
               "target": "Package",
-              "version": "[4.1.1.318, )"
+              "version": "[4.1.2.350, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -62,6 +62,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[6.0.10, )"
+            },
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[6.0.17, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
