@@ -84,7 +84,7 @@
 			new
 			{
 				Name = group.Key,
-				SensorData = group.OrderBy(x => x.TimeStamp).Take(DesiredElementsInChart)
+				SensorData = group.OrderByDescending(x => x.TimeStamp).Take(DesiredElementsInChart).OrderBy(x => x.TimeStamp).ToList()
 			}
 		).ToListAsync();
 
