@@ -1,4 +1,4 @@
-﻿@page "/counter"
+﻿@page "/stats"
 @using System.Net.Http.Json
 @using IOT_WateringSensor.Data
 @using IOT_WateringSensor.Database
@@ -18,12 +18,12 @@
 	<HeaderContent>
 		<MudTh>Client</MudTh>
 		<MudTh>Timestamp</MudTh>
-		<MudTh>Moisture</MudTh>
+		<MudTh>Moisture (%)</MudTh>
 	</HeaderContent>
 	<RowTemplate>
 		<MudTd DataLabel="Client">@context.ClientId</MudTd>
 		<MudTd DataLabel="Timestamp">@context.TimeStamp</MudTd>
-		<MudTd DataLabel="Moisture">@context.Moisture</MudTd>
+		<MudTd DataLabel="Moisture">@context.Moisture%</MudTd>
 	</RowTemplate>
 </MudTable>
 
@@ -74,7 +74,7 @@
 
 		//update table
 
-		Elements = await dBContext.SensorData.Where(x => true).OrderBy(x => x.TimeStamp).ToListAsync();
+		Elements = await dBContext.SensorData.Where(x => true).OrderByDescending(x => x.TimeStamp).Take(DesiredElementsInChart).ToListAsync();
 
 		//update chart
 
