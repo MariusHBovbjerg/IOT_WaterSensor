@@ -1,6 +1,7 @@
 using System.Text.Json;
 using IOT_WateringSensor.Database;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IOT_WateringSensor;
 
