@@ -1,5 +1,4 @@
-﻿using System;
-using IOT_WateringSensor.Data;
+﻿using IOT_WateringSensor.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

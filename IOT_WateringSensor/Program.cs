@@ -1,14 +1,10 @@
 using System.Text.Json.Serialization;
-using System.Threading;
 using IOT_WateringSensor;
+using IOT_WateringSensor.Areas.Identity;
 using IOT_WateringSensor.Database;
-using IOT_WateringSensor.MQTT_Gøj;
-using IOT_WateringSensorHub.Areas.Identity;
-using Microsoft.AspNetCore.Builder;
+using IOT_WateringSensor.MQTT_Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,22 +49,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapBlazorHub();
-
-app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), blazor =>
-{
-    blazor.UseEndpoints(endpoints =>
-    {
-        endpoints.MapFallbackToPage("/_Host");
-    });
-});
-
-//explicitly map api endpoints only when path starts with api
-app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/api"), api =>
-{
-    api.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers();
-    });
-});
+app.MapFallbackToPage("/_Host");
 
 app.Run();

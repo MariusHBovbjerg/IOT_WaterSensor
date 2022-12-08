@@ -1,22 +1,39 @@
 ﻿@page "/devices"
 @using IOT_WateringSensor.Database
-@using IOT_WateringSensor.DeviceController
 @using Microsoft.AspNetCore.Components
 @using System.Security.Claims
 @using IOT_WateringSensor.Data
 @inject WaterSensorDbContext dBContext
 @inject IHttpContextAccessor HttpContextAccessor
 <div>
-<MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
-	<HeaderContent>
-		<MudTh>DeviceId</MudTh>
-	</HeaderContent>
-	<RowTemplate>
-		<MudTd DataLabel="DeviceId">@context.DeviceId</MudTd>
-	</RowTemplate>
-</MudTable>
+	@{
+		if (Elements.Count() == 0)
+		{
+			<MudText>
+				Uh oh!
+			</MudText>
+			<MudText>
+				It looks like you haven't registered any sensors yet.
+			</MudText>
+			<MudText>
+				Please go to the <MudLink Href="/register">registration</MudLink> page to register your sensors
+			</MudText>
+		}
+		else
+		{
 
+			<MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+				<HeaderContent>
+					<MudTh>DeviceId</MudTh>
+				</HeaderContent>
+				<RowTemplate>
+					<MudTd DataLabel="DeviceId">@context.DeviceId</MudTd>
+				</RowTemplate>
+			</MudTable>
+		}
+	}
 </div>
+
 @code {
 	
 	public List<UserToDeviceBinding> Elements { get; set; } = new ();
