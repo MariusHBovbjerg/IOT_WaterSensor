@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Text;
 using IOT_WateringSensor.Data;
 using IOT_WateringSensor.Database;
 using MQTTnet;
