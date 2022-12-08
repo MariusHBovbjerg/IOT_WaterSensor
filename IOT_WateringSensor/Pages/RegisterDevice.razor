@@ -1,0 +1,62 @@
+﻿@page "/register"
+@using IOT_WateringSensor.Database
+@using IOT_WateringSensor.DeviceController
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web;
+@inject WaterSensorDbContext dBContext
+
+<div>
+<EditForm Model="@exampleModel" OnValidSubmit="HandleValidSubmit">
+	
+	<ValidationSummary />
+	<div class="form-group">
+		<label for="@exampleModel.deviceId">DeviceId</label>
+		<InputText class="form-control" id="Name" @bind-Value="exampleModel.deviceId"/>
+	
+	</div>
+	
+	<div class="form-group">
+		<label for="@exampleModel.bindingKey">BindingKey</label>
+		<InputText class="form-control" id="Description" @bind-Value="exampleModel.bindingKey" />
+		
+		
+	</div>
+
+	<button type="submit" class="btn btn-primary" @onclick="HandleValidSubmit">Submit</button>
+	
+	
+</EditForm>
+
+	<button @onclick="HandleValidSubmit2" type="button">yo</button>
+	
+</div>
+
+@{
+		if (answerGoesHard)
+		{
+			<p>Successfully registered device!</p>
+		}
+	}
+@code {
+	
+	public bool answerGoesHard = false;
+	
+	DeviceController DeviceController = new ();
+	
+	DeviceController.RegisterDeviceRequest exampleModel = new();
+	
+	async void HandleValidSubmit()
+	{
+		var response = await DeviceController.RegisterDevice(dBContext, exampleModel);
+		
+		if(response.ToString() == "OK")
+		{
+			answerGoesHard = true;
+		}
+	}
+	
+	void HandleValidSubmit2()
+	{
+		Console.WriteLine("yo");
+	}
+}

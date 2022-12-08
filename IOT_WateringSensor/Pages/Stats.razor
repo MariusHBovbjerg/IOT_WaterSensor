@@ -1,11 +1,8 @@
 ﻿@page "/stats"
-@using System.Net.Http.Json
 @using IOT_WateringSensor.Data
 @using IOT_WateringSensor.Database
 @using Microsoft.EntityFrameworkCore
-@using MudBlazor
 @using System.Timers
-@inject HttpClient httpClient
 @inject WaterSensorDbContext dBContext
 
 <div>
@@ -30,10 +27,10 @@
 @code {
 	private bool _loading = true;
 	private IEnumerable<SensorData> Elements = new List<SensorData>();
-	public List<ChartSeries> Series = new List<ChartSeries>();
+	public List<ChartSeries> Series = new();
 	public string[] XAxisLabels = {};
 	
-	private System.Timers.Timer timer = new System.Timers.Timer(1000);
+	private Timer timer = new (1000);
 	
 	private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
 	
@@ -87,7 +84,7 @@
 			}
 		).ToListAsync();
 
-		List<ChartSeries> newSeries = new List<ChartSeries>();
+		var newSeries = new List<ChartSeries>();
 
 		ChartData.ForEach(group => newSeries.Add(new ChartSeries() { Name = group.Name.ToString().Split('-')[0], Data = group.SensorData.Select(data => (double)data.Moisture).ToArray() }));
 		var longestDataset = ChartData.Select(g => g.SensorData.Count()).Max();
