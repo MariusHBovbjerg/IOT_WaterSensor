@@ -1,28 +1,23 @@
-volumes:
-  certs:
-  vhost:
-  html:
-  acme:
-
-
+version: "3"
 services:
-
-  iotproject:
-    container_name: iotproject
-    image: ghcr.io/smell-ya-later/iot_watersensor:main
-    environment:
-      - "MSSQL_HOST=iotdb"
-      - "MSSQL_PORT=1433"
+  sqldb:
+    image: 'mcr.microsoft.com/mssql/server'
     ports:
-      - 8005:80
-      - 1883:1883
-    depends_on:
-      - iotdb
-  iotdb:
-    container_name: iotprojectdb
-    image: "mcr.microsoft.com/mssql/server"
+      - '1433:1433'
     environment:
-      SA_PASSWORD: "yourStrong(!)Password"
-      ACCEPT_EULA: "Y"
-    expose:
-      - 1433
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrong(!)Password
+  hivemq:
+    image: hivemq/hivemq4
+    ports:
+      - 1883:1883
+      - 9001:9001
+      - 8080:8080
+  redis:
+    container_name: IOT-redis
+    image: redis:6.2-alpine
+    hostname: redis
+    ports:
+      - '6379:6379'
+volumes:
+  db_data: ~

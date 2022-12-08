@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">IOT_WateringSensor</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -14,21 +16,28 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="stats">
-                <span class="oi oi-plus" aria-hidden="true"></span> Stats
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="register">
-                <span class="oi oi-plus" aria-hidden="true"></span> Register Device
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="devices">
-                <span class="oi oi-plus" aria-hidden="true"></span> Devices
-            </NavLink>
-        </div>
+        @{
+            // hide tabs if user is not logged in
+            var isLoggedIn = HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+            if (isLoggedIn)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="stats">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Stats
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="register">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Register Device
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="devices">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Devices
+                    </NavLink>
+                </div>
+            }
+        }
     </nav>
 </div>
 

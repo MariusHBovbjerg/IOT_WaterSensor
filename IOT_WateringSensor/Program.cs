@@ -1,14 +1,10 @@
 using System.Text.Json.Serialization;
-using System.Threading;
 using IOT_WateringSensor;
+using IOT_WateringSensor.Areas.Identity;
 using IOT_WateringSensor.Database;
-using IOT_WateringSensor.MQTT_Gøj;
-using IOT_WateringSensorHub.Areas.Identity;
-using Microsoft.AspNetCore.Builder;
+using IOT_WateringSensor.MQTT_Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,5 +66,10 @@ app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments("/api"), api =>
         endpoints.MapControllers();
     });
 });
-
+/*
+await using (var scope = builder.Services.BuildServiceProvider().GetRequiredService<WaterSensorDbContext>())
+{
+    await scope.Database.EnsureCreatedAsync();
+}
+*/
 app.Run();

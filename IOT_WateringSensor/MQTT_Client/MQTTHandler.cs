@@ -2,10 +2,10 @@
 using IOT_WateringSensor.Data;
 using IOT_WateringSensor.Database;
 using MQTTnet;
-using MQTTnet.Server;
+using MQTTnet.Client;
 using Newtonsoft.Json;
 
-namespace IOT_WateringSensor.MQTT_Gøj;
+namespace IOT_WateringSensor.MQTT_Client;
 
 public class MqttHandler
 {
@@ -21,27 +21,34 @@ public class MqttHandler
     {
         var mqttFactory = new MqttFactory();
 
-        var mqttServerOptions = new MqttServerOptionsBuilder()
-            .WithDefaultEndpoint()
+        using var mqttClient = mqttFactory.CreateMqttClient();
+        
+        var mqttClientOptions = new MqttClientOptionsBuilder()
+            .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
             .Build();
 
-        using var mqttServer = mqttFactory.CreateMqttServer(mqttServerOptions);
-
-        mqttServer.InterceptingPublishAsync += 
+        mqttClient.ApplicationMessageReceivedAsync += 
             async e => await ConsumePublishedMessage(e);
 
-        await mqttServer.StartAsync();
+        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
         
+        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+            .WithTopicFilter(
+                f =>
+                {
+                    f.WithTopic("water");
+                })
+            .Build();
+
+        await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
         // Trick to keep the program running without busy waiting the thread
         var manualResetEvent = new ManualResetEvent(false);
         manualResetEvent.WaitOne();
-
-        await mqttServer.StopAsync();
     }
 
-    private async Task ConsumePublishedMessage(InterceptingPublishEventArgs e)
+    private async Task ConsumePublishedMessage(MqttApplicationMessageReceivedEventArgs e)
     {
-        
         if(!e.ApplicationMessage.Topic.Contains("water"))
             return;
             
