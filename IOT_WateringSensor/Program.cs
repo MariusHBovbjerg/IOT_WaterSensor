@@ -1,10 +1,14 @@
 using System.Text.Json.Serialization;
+using System.Threading;
 using IOT_WateringSensor;
 using IOT_WateringSensor.Database;
 using IOT_WateringSensor.MQTT_Gøj;
 using IOT_WateringSensorHub.Areas.Identity;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,14 +21,12 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<WaterSensorDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-
 new Thread(async _ =>
 {
     var serviceCollection = builder.Services.BuildServiceProvider();
@@ -50,10 +52,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapBlazorHub();
 
 app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), blazor =>
 {
-    blazor.UseRouting();
     blazor.UseEndpoints(endpoints =>
     {
         endpoints.MapFallbackToPage("/_Host");

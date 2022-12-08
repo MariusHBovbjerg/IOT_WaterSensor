@@ -22,8 +22,7 @@ class Program
             using var mqttClient = mqttFactory.CreateMqttClient();
             
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "iotingest.heldgaard.dev")
-                .WithTls()
+                .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
                 .Build();
 
             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);

@@ -16,44 +16,12 @@ public class DeviceController : Controller
     {
         public string? deviceId { get; set; }
         public string? bindingKey { get; set; }
-    };
-    
-    [HttpPost]
-    [Route("register")]
-    public async Task<ActionResult> RegisterDevice(
-        WaterSensorDbContext dbContext,
-        [FromBody] RegisterDeviceRequest registerRequest)
-    {
-        var user = HttpContext.User.Identity;
-        
-        var userFromDb = dbContext.Users.FirstOrDefault(u => u.UserName == user.Name);
-        
-        if (userFromDb == null)
-            return BadRequest();
-        
-        var binding = dbContext.UserToDeviceBindings.FirstOrDefault(x => x.DeviceId == registerRequest.deviceId);
-        
-        if(binding == null)
-            return BadRequest();
-        
-        if(binding.isBound)
-            return BadRequest();
-
-        if (binding.bindingKey != registerRequest.bindingKey)
-            return BadRequest();
-        
-        binding.UserId = userFromDb.Id;
-        binding.isBound = true;
-
-        await dbContext.SaveChangesAsync();
-
-        return Ok();
     }
-    
+
     [HttpPost]
     [Route("prepareBinding")]
     public async Task<ActionResult<string>> PrepareBinding(
-        WaterSensorDbContext dbContext,
+        [FromServices] WaterSensorDbContext dbContext,
         [FromBody] string deviceId)
     {
         var binding = dbContext.UserToDeviceBindings.FirstOrDefault(x => x.DeviceId == deviceId);

@@ -2,61 +2,90 @@
 @using IOT_WateringSensor.Database
 @using IOT_WateringSensor.DeviceController
 @using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Web;
+@using System.Security.Claims
 @inject WaterSensorDbContext dBContext
-
+@inject IHttpContextAccessor HttpContextAccessor
 <div>
-<EditForm Model="@exampleModel" OnValidSubmit="HandleValidSubmit">
-	
-	<ValidationSummary />
-	<div class="form-group">
-		<label for="@exampleModel.deviceId">DeviceId</label>
-		<InputText class="form-control" id="Name" @bind-Value="exampleModel.deviceId"/>
-	
-	</div>
-	
-	<div class="form-group">
-		<label for="@exampleModel.bindingKey">BindingKey</label>
-		<InputText class="form-control" id="Description" @bind-Value="exampleModel.bindingKey" />
+	<EditForm Model="@exampleModel" OnValidSubmit="HandleValidSubmit">
 		
+		<ValidationSummary />
+		<div class="form-group">
+			<label for="@exampleModel.deviceId">DeviceId</label>
+			<InputText class="form-control" id="Name" @bind-Value="exampleModel.deviceId"/>
 		
-	</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="@exampleModel.bindingKey">BindingKey</label>
+			<InputText class="form-control" id="Description" @bind-Value="exampleModel.bindingKey" />
+			
+			
+		</div>
 
-	<button type="submit" class="btn btn-primary" @onclick="HandleValidSubmit">Submit</button>
-	
-	
-</EditForm>
+		<button type="submit" class="btn btn-primary">Submit</button>
+		
+	</EditForm>
 
-	<button @onclick="HandleValidSubmit2" type="button">yo</button>
-	
-</div>
-
-@{
+	@{
 		if (answerGoesHard)
 		{
 			<p>Successfully registered device!</p>
 		}
+		if (failed)
+		{
+			<p>Failed to register device!</p>
+		}
 	}
+</div>
 @code {
 	
 	public bool answerGoesHard = false;
-	
-	DeviceController DeviceController = new ();
-	
+	public bool failed = false;
+
 	DeviceController.RegisterDeviceRequest exampleModel = new();
 	
 	async void HandleValidSubmit()
 	{
-		var response = await DeviceController.RegisterDevice(dBContext, exampleModel);
+
+		var user = HttpContextAccessor.HttpContext.User.Identity;
 		
-		if(response.ToString() == "OK")
+		var userFromDb = dBContext.Users.FirstOrDefault(u => u.UserName == user.Name);
+
+		if (userFromDb == null)
 		{
-			answerGoesHard = true;
+			failed = true;
+			answerGoesHard = false;
+			return;
 		}
-	}
-	
-	void HandleValidSubmit2()
-	{
-		Console.WriteLine("yo");
+		var binding = dBContext.UserToDeviceBindings.FirstOrDefault(x => x.DeviceId == exampleModel.deviceId);
+        
+		if(binding == null)
+		{
+			failed = true;
+			answerGoesHard = false;
+			return;
+		}
+        
+		if(binding.isBound)
+		{
+			failed = true;
+			answerGoesHard = false;
+			return;
+		}
+
+		if (binding.bindingKey != exampleModel.bindingKey)
+		{
+			failed = true;
+			answerGoesHard = false;
+			return;
+		}
+        
+		binding.UserId = userFromDb.Id;
+		binding.isBound = true;
+
+		await dBContext.SaveChangesAsync();
+
+		answerGoesHard = true;
+		failed = false;
 	}
 }
