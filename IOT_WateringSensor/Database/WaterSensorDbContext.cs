@@ -1,13 +1,20 @@
 ﻿using System;
 using IOT_WateringSensor.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace IOT_WateringSensor.Database;
 
-public class WaterSensorDbContext : DbContext
+public class WaterSensorDbContext : IdentityDbContext
 {
+    public WaterSensorDbContext(DbContextOptions<WaterSensorDbContext> options) : base(options)
+    {
+    }
+    
     public DbSet<SensorData> SensorData { get; set; }
     
+    public DbSet<UserToDeviceBinding> UserToDeviceBindings { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString =

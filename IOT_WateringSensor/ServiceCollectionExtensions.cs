@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
         
         services.AddDbContext<WaterSensorDbContext>();
         services.AddLogging();
+        services.AddHttpContextAccessor();
         
         services.Configure<JsonOptions>(options =>
         {
