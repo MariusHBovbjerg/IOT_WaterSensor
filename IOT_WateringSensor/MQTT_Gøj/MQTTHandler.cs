@@ -54,7 +54,7 @@ public class MqttHandler
 
         await _context.SensorData.AddAsync(new SensorData
         {
-            ClientId = payload.ClientId,
+            DeviceId = payload.ClientId,
             TimeStamp = payload.TimeStamp,
             Moisture = payload.Moisture
         });

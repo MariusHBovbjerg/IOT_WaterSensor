@@ -4,6 +4,7 @@
 @using Microsoft.EntityFrameworkCore
 @using System.Timers
 @inject WaterSensorDbContext dBContext
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div>
 	<MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="350px"></MudChart>
@@ -18,7 +19,7 @@
 		<MudTh>Moisture (%)</MudTh>
 	</HeaderContent>
 	<RowTemplate>
-		<MudTd DataLabel="Client">@context.ClientId</MudTd>
+		<MudTd DataLabel="Client">@context.DeviceId</MudTd>
 		<MudTd DataLabel="Timestamp">@context.TimeStamp</MudTd>
 		<MudTd DataLabel="Moisture">@context.Moisture%</MudTd>
 	</RowTemplate>
@@ -70,12 +71,18 @@
 	{
 
 		//update table
+		
+		var user = HttpContextAccessor.HttpContext.User.Identity;
+		
+		var userId = dBContext.Users.FirstOrDefault(u => u.UserName == user.Name).Id;
+		
+		var usersDevices = dBContext.UserToDeviceBindings.Where(d => d.UserId == userId).Select(d => d.DeviceId).ToList();
 
-		Elements = await dBContext.SensorData.Where(x => true).OrderByDescending(x => x.TimeStamp).Take(DesiredElementsInChart).ToListAsync();
+		Elements = await dBContext.SensorData.Where(x => usersDevices.Contains(x.DeviceId.ToString()) ).OrderByDescending(x => x.TimeStamp).Take(DesiredElementsInChart).ToListAsync();
 
 		//update chart
 
-		var ChartData = await dBContext.SensorData.GroupBy(x => x.ClientId).Select(group =>
+		var ChartData = await dBContext.SensorData.Where(x => usersDevices.Contains(x.DeviceId.ToString())).GroupBy(x => x.DeviceId).Select(group =>
 
 			new
 			{

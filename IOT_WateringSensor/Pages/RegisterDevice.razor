@@ -39,8 +39,10 @@
 </div>
 @code {
 	
-	public bool answerGoesHard = false;
-	public bool failed = false;
+	[Parameter]
+	public bool answerGoesHard { get; set; } = false;
+	[Parameter]
+	public bool failed { get; set; } = false;
 
 	DeviceController.RegisterDeviceRequest exampleModel = new();
 	
@@ -55,6 +57,7 @@
 		{
 			failed = true;
 			answerGoesHard = false;
+			await InvokeAsync(() => StateHasChanged());
 			return;
 		}
 		var binding = dBContext.UserToDeviceBindings.FirstOrDefault(x => x.DeviceId == exampleModel.deviceId);
@@ -63,6 +66,7 @@
 		{
 			failed = true;
 			answerGoesHard = false;
+			await InvokeAsync(() => StateHasChanged());
 			return;
 		}
         
@@ -70,6 +74,7 @@
 		{
 			failed = true;
 			answerGoesHard = false;
+			await InvokeAsync(() => StateHasChanged());
 			return;
 		}
 
@@ -77,6 +82,7 @@
 		{
 			failed = true;
 			answerGoesHard = false;
+			await InvokeAsync(() => StateHasChanged());
 			return;
 		}
         
@@ -87,5 +93,6 @@
 
 		answerGoesHard = true;
 		failed = false;
+		await InvokeAsync(() => StateHasChanged());
 	}
 }

@@ -7,7 +7,7 @@ namespace IOT_WateringSensor.Data;
 public class SensorData : IEntityTypeConfiguration<SensorData>
 {
     [Key] public Guid Id { get; set; }
-    public Guid ClientId { get; set; }
+    public Guid DeviceId { get; set; }
     public DateTime TimeStamp { get; set; }
     public int Moisture { get; set; }
 

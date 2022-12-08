@@ -1,0 +1,32 @@
+﻿@page "/devices"
+@using IOT_WateringSensor.Database
+@using IOT_WateringSensor.DeviceController
+@using Microsoft.AspNetCore.Components
+@using System.Security.Claims
+@using IOT_WateringSensor.Data
+@inject WaterSensorDbContext dBContext
+@inject IHttpContextAccessor HttpContextAccessor
+<div>
+<MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+	<HeaderContent>
+		<MudTh>DeviceId</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="DeviceId">@context.DeviceId</MudTd>
+	</RowTemplate>
+</MudTable>
+
+</div>
+@code {
+	
+	public List<UserToDeviceBinding> Elements { get; set; } = new ();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var user = HttpContextAccessor.HttpContext.User.Identity;
+		
+		var userFromDb = dBContext.Users.FirstOrDefault(u => u.UserName == user.Name);
+
+		Elements = dBContext.UserToDeviceBindings.Where(x => x.UserId == userFromDb.Id).ToList();
+	}
+}
