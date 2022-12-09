@@ -95,7 +95,7 @@ jobs:
       - name: Install HiveMQ Helm Chart
         uses: WyriHaximus/github-action-helm3@v2.0
         with:
-          exec: helm upgrade --install -f k8/hivemq-values.yml hivemq hivemq/hivemq-operator
+          exec: helm upgrade --install -f k8/hive/hivemq-values.yml hivemq hivemq/hivemq-operator
           kubeconfig: "${{ secrets.KUBECONFIG }}"
 
       - name: Deploy manifests
@@ -110,6 +110,7 @@ jobs:
             k8/web/iotweb-deployment.yml
             k8/web/iotweb-service.yml
             k8/web/iotweb-ingress.yml
+            k8/hive/mqtt-ingress.yml
 
           images: ${{ needs.build.outputs.tags }}
           imagepullsecrets: |
