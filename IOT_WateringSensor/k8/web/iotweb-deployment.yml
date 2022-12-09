@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iotweb
+  labels:
+    app: iotweb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: iotweb
+  template:
+    metadata:
+      labels:
+        app: iotweb
+    spec:
+      containers:
+        - name: iotweb
+          image: ghcr.io/smell-ya-later/iot_watersensor:VERSION
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: iotweb-config
+            - secretRef:
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: password     
+      imagePullSecrets:
+        - name: iotcred

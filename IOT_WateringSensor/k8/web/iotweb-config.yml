@@ -1,0 +1,12 @@
+apiVersion: v1
+
+kind: ConfigMap
+
+metadata:
+  name: iotweb-config
+
+  namespace: default
+
+data:
+  MSSQL_HOST: mssql
+  MSSQL_PORT: "1433"

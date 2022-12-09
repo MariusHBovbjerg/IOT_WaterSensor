@@ -1,0 +1,24 @@
+hivemq:
+  nodeCount: "1"
+  cpu: "1"
+  memory: "200Mi"
+  ephemeralStorage: "500Mi"
+  cpuLimitRatio: "1"
+  memoryLimitRatio: "1"
+  ephemeralStorageLimitRatio: "1"
+  ports:
+   - name: "mqtt"
+     port: 1883
+     expose: true
+     patch:
+     - '[{"op":"add","path":"/spec/selector/hivemq.com~1node-offline","value":"false"},{"op":"add","path":"/metadata/annotations","value":{"service.spec.externalTrafficPolicy":"Local"}}]'
+     # If you want Kubernetes to expose the MQTT port
+     # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]'
+   - name: "cc"
+     port: 8080
+     expose: true
+     patch:
+     - '[{"op":"add","path":"/spec/sessionAffinity","value":"ClientIP"}]'
+     # If you want Kubernetes to expose the HiveMQ control center via a load balancer.
+     # Warning: You should consider configuring proper security and TLS beforehand. Ingress may be a better option here.
+     # - '[{"op":"add","path":"/spec/type","value":"LoadBalancer"}]'
