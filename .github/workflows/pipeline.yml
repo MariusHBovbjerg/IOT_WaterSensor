@@ -84,7 +84,7 @@ jobs:
           secret-name: "mssql-secret"
           secret-type: "generic"
           data: ${{ secrets.MSSQL_SECRET }}
-        id: create-secret
+        id: create-db-secret
 
       - name: Add HiveMQ Helm Repository
         uses: WyriHaximus/github-action-helm3@v2.0
