@@ -23,21 +23,21 @@ skinparam ranksep 10
 
 left to right direction
 
-Service_Boundary(redisns, Redis Service) {
-    KubernetesSvc(svcRedis2, "Redis svc", "")
-    KubernetesDeploy(deployRedis, "Deployment", "")
-    KubernetesRs(rsRedis, "ReplicaSet", " ")
-    KubernetesPod(podRedis1, "Master", "")
-    KubernetesPod(podRedis2, "Slave 1", "")
-    KubernetesPod(podRedis3, "Slave 2", "")
-}
-Rel_U(deployRedis, rsRedis, " ")
-Rel_U(rsRedis, podRedis1, " ")
-Rel_U(rsRedis, podRedis2, " ")
-Rel_U(rsRedis, podRedis3, " ")
-Rel(svcRedis2,podRedis1, " ")
-Rel(svcRedis2,podRedis2, " ")
-Rel(svcRedis2,podRedis3, " ")
+' Service_Boundary(redisns, Redis Service) {
+'     KubernetesSvc(svcRedis2, "Redis svc", "")
+'     KubernetesDeploy(deployRedis, "Deployment", "")
+'     KubernetesRs(rsRedis, "ReplicaSet", " ")
+'     KubernetesPod(podRedis1, "Master", "")
+'     KubernetesPod(podRedis2, "Slave 1", "")
+'     KubernetesPod(podRedis3, "Slave 2", "")
+' }
+' Rel_U(deployRedis, rsRedis, " ")
+' Rel_U(rsRedis, podRedis1, " ")
+' Rel_U(rsRedis, podRedis2, " ")
+' Rel_U(rsRedis, podRedis3, " ")
+' Rel(svcRedis2,podRedis1, " ")
+' Rel(svcRedis2,podRedis2, " ")
+' Rel(svcRedis2,podRedis3, " ")
 
 Service_Boundary(msSqlns, MS SQL Service) {
     KubernetesSvc(svcMsSql2, "DB svc", "")

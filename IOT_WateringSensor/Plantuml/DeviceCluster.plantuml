@@ -1,6 +1,6 @@
 @startuml kubernetes
 
-footer Kubernetes Plant-UML
+footer Kubernetes Components for Device Flow
 scale max 1024 width
 
 skinparam nodesep 10
@@ -21,12 +21,11 @@ skinparam ranksep 10
 !includeurl KubernetesPuml/OSS/KubernetesDeploy.puml
 !includeurl KubernetesPuml/OSS/KubernetesHpa.puml
 
-actor "Device" as user
 ' actor "Device" as device
 left to right direction
 
 ' Kubernetes Components
-Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster") {
+Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster (Device Related)") {
     Namespace_Boundary(ns, "Production") {
         KubernetesIng(ingWeb, "iotingest.[...].dev", "")
         Service_Boundary(displayDbBnd, " ") {
@@ -43,7 +42,6 @@ Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster") {
     }
 }
 
-Rel(user,ingWeb, " ")
 Rel(ingWeb,svcMqtt, " ")
 Rel_U(podApi1,svcMqtt, " ")
 Rel(podApi1,svcDb, " ")

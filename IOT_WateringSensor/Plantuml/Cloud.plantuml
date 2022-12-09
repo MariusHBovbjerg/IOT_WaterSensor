@@ -21,12 +21,11 @@ skinparam ranksep 10
 !includeurl KubernetesPuml/OSS/KubernetesDeploy.puml
 !includeurl KubernetesPuml/OSS/KubernetesHpa.puml
 
-actor "User" as user
 ' actor "Device" as device
 left to right direction
 
 ' Kubernetes Components
-Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster") {
+Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster (User Related)") {
     Namespace_Boundary(ns, "Production") {
         ' KubernetesIng(ingIngest, "iotingest.heldgaard.dev", "")
         KubernetesIng(ingWeb, "iotweb.[...].dev", "")
@@ -52,7 +51,6 @@ Cluster_Boundary(cluster, "IOTProject Kubernetes Cluster") {
 
 
 
-Rel(user,ingWeb, " ")
 Rel(ingWeb,svcWeb, " ")
 Rel(svcWeb,podApi1, " ")
 Rel_D(podApi1,svcDb, " ")
