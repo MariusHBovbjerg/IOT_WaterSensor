@@ -96,7 +96,7 @@ jobs:
         uses: WyriHaximus/github-action-helm3@v2.0
         with:
           exec: helm upgrade --install -f k8/hivemq-values.yml hivemq hivemq/hivemq-operator
-          kubeconfig: "${{ secrets.KUBECONFIG }"
+          kubeconfig: "${{ secrets.KUBECONFIG }}"
 
       - name: Deploy manifests
         uses: Azure/k8s-deploy@v3.1
