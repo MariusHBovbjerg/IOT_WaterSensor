@@ -45,11 +45,11 @@ jobs:
       - name: Build and Push 🛠️➡️🚀
         uses: docker/build-push-action@v2
         with:
-          context: ./
+          context: IOT_WateringSensor/
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          file: ./Dockerfile
+          file: IOT_WateringSensor/Dockerfile
           cache-from: type=gha #caching
           cache-to: type=gha #caching
   deployment:
