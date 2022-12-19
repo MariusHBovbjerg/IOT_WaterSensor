@@ -1,13 +1,11 @@
 ﻿@page "/devices"
 @using IOT_WateringSensor.Database
-@using Microsoft.AspNetCore.Components
-@using System.Security.Claims
 @using IOT_WateringSensor.Data
 @inject WaterSensorDbContext dBContext
 @inject IHttpContextAccessor HttpContextAccessor
 <div>
 	@{
-		if (Elements.Count() == 0)
+		if (!Elements.Any())
 		{
 			<MudText>
 				Uh oh!
@@ -21,7 +19,6 @@
 		}
 		else
 		{
-
 			<MudTable Items="@Elements" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
 				<HeaderContent>
 					<MudTh>DeviceId</MudTh>

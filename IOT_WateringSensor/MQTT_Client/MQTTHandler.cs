@@ -33,16 +33,23 @@ public class MqttHandler
 
         await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
         
-        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+        var mqttSubscribeOptionsWater = mqttFactory.CreateSubscribeOptionsBuilder()
             .WithTopicFilter(
                 f =>
                 {
                     f.WithTopic("water");
+                })
+            .Build();
+        var mqttSubscribeOptionsBind = mqttFactory.CreateSubscribeOptionsBuilder()
+            .WithTopicFilter(
+                f =>
+                {
                     f.WithTopic("bind");
                 })
             .Build();
 
-        await _mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+        await _mqttClient.SubscribeAsync(mqttSubscribeOptionsWater, CancellationToken.None);
+        await _mqttClient.SubscribeAsync(mqttSubscribeOptionsBind, CancellationToken.None);
 
         // Trick to keep the program running without busy waiting the thread
         var manualResetEvent = new ManualResetEvent(false);
