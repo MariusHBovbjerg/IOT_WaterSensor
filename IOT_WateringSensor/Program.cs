@@ -10,7 +10,7 @@ new Thread(async _ =>
 {
     var serviceCollection = builder.Services.BuildServiceProvider();
     var handler = new MqttHandler(serviceCollection.GetRequiredService<WaterSensorDbContext>());
-    await handler.Run_Server_With_Logging();
+    await handler.HandleMQTT();
 }).Start();
 
 var app = builder.Build();

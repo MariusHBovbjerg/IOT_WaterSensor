@@ -17,22 +17,22 @@ public class MqttHandler
         _context = dbContext;
         _context.Database.EnsureCreated();
     }
-    
-    public async Task Run_Server_With_Logging()
+
+    public async Task HandleMQTT()
     {
         var mqttFactory = new MqttFactory();
 
         _mqttClient = mqttFactory.CreateMqttClient();
-        
+
         var mqttClientOptions = new MqttClientOptionsBuilder()
             .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
             .Build();
 
-        _mqttClient.ApplicationMessageReceivedAsync += 
+        _mqttClient.ApplicationMessageReceivedAsync +=
             async e => await ConsumePublishedMessage(e);
 
         await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-        
+
         var mqttSubscribeOptionsWater = mqttFactory.CreateSubscribeOptionsBuilder()
             .WithTopicFilter(
                 f =>
@@ -64,7 +64,7 @@ public class MqttHandler
             case "water":
                 var payload = JsonConvert.DeserializeObject<SensorDataDto>(message);
                 Console.WriteLine("Intercepted publish: " + payload.ClientId + " " + payload.TimeStamp + " " + payload.Moisture);
-                
+
                 await _context.SensorData.AddAsync(new SensorData
                 {
                     DeviceId = payload.ClientId,
@@ -81,27 +81,27 @@ public class MqttHandler
 
                 if (binding != null)
                     return;
-        
+
                 var newBinding = new UserToDeviceBinding
                 {
                     DeviceId = deviceId,
                     bindingKey = Guid.NewGuid().ToString(),
                     isBound = false
                 };
-        
+
                 _context.UserToDeviceBindings.Add(newBinding);
 
                 var responseMessage = new MqttApplicationMessageBuilder()
                     .WithTopic(deviceId)
                     .WithPayload(newBinding.bindingKey)
                     .Build();
-                    
+
                 await _mqttClient.PublishAsync(responseMessage, CancellationToken.None);
 
                 break;
             default:
                 return;
-            
+
         }
 
         await _context.SaveChangesAsync();

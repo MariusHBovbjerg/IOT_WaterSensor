@@ -1,0 +1,28 @@
+@startuml Entity_Relationship_Diagram
+
+footer IOT Project - Entity Relationship Diagram
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "SensorData" as sd {
+  *Id : Guid <<generated>>
+  --
+  *DeviceId : Guid
+  *Moisture : Int
+  *TimeStamp : DateTime
+}
+
+entity "UserToDeviceBinding" as udb {
+  *Id : number <<generated>>
+  --
+  *UserId : string <<nullable>>
+  *DeviceId : string
+  *IsBound : bool
+  *bindingKey : string
+}
+
+@enduml
