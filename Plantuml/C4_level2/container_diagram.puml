@@ -1,0 +1,26 @@
+@startuml container_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+left footer "  C4 - Container Diagram - IOT Plant Monitoring System"
+
+Person(User, "User")
+
+System_Boundary(c2, "Plant Monitoring System") {
+    Container(device, "IOT Device", "Container: C# .NET Emulator", "Monitors the plant's environment and sends data to the API")
+
+    Container(HiveMQ, "MQTT Broker", "Container: HiveMQ", "Receives data from the devices and sends it to the API")
+
+    Container(system, "Plant Monitoring System", "Container: C#, ASP.NET 6", "Allows users to view their plants and receives data from the devices")
+
+    ContainerDb(db, "Database", "Container: MSSQL", "Stores user info and plant data")
+}
+
+Rel_D(User, system, "Uses")
+
+Lay_R(system, HiveMQ)
+
+BiRel(device, HiveMQ, "Sends sensor to and receives pairing code from")
+BiRel(HiveMQ, system, "Sends pairing code to and receives sensor data from")
+Rel(system, db, "Sends requests to")
+
+@enduml

@@ -13,11 +13,16 @@ public static class ServiceCollectionExtensions
 {
     public static void ConfigureServices(this IServiceCollection services)
     {
-        services.AddHttpClient();
         
         services.AddDbContext<WaterSensorDbContext>();
+        services.AddDefaultIdentity<IdentityUser>(
+                options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<WaterSensorDbContext>();
+        services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+        
         services.AddLogging();
         services.AddHttpContextAccessor();
+        services.AddHttpClient();
         
         services.Configure<JsonOptions>(options =>
         {
@@ -37,12 +42,8 @@ public static class ServiceCollectionExtensions
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
-        services.AddDefaultIdentity<IdentityUser>(
-            options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<WaterSensorDbContext>();
         services.AddRazorPages();
         services.AddServerSideBlazor();
         services.AddMudServices();
-        services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
     }
 }

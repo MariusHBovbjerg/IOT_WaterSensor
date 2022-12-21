@@ -1,4 +1,4 @@
-@startuml kubernetes
+@startuml Cluster_Diagram
 
 footer Kubernetes Components for Device Flow
 scale max 1024 width

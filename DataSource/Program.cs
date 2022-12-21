@@ -7,19 +7,19 @@ namespace DataSource;
 
 class Program
 {
-    
+
     private static Dictionary<Guid, int> _guids = new() {
-        {Guid.Parse("0ddc7bef-865f-42ba-85b6-1de79b3df96e"), 70},
-        {Guid.Parse("0ddc7bef-865f-42ba-85b6-1de78b3df96f"), 50},
-        {Guid.Parse("2a7f264d-b158-4d10-b6a9-cc9b4dd8b725"), 30}};
-    
+        {Guid.Parse("fcab229a-4fe4-4fa1-9f1b-4ce9304a76b6"), 70},
+        {Guid.Parse("d617cb1a-0705-451e-a2b8-b8997d3c6820"), 50},
+        {Guid.Parse("61d11693-5592-4455-b204-5d4504037fcc"), 30}};
+
     public static async Task Main(string[] args)
     {
         var mqttFactory = new MqttFactory();
         var random = new Random();
-        
+
         using var mqttClient = mqttFactory.CreateMqttClient();
-            
+
         var mqttClientOptions = new MqttClientOptionsBuilder()
             .WithTcpServer(Environment.GetEnvironmentVariable("MQTT_Broker") ?? "[::1]")
             .Build();
@@ -35,7 +35,7 @@ class Program
         {
             mqttSubscribeOptions.TopicFilters.Add(topic);
         }
-        
+
         await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
 
         foreach (var guid in _guids)
@@ -47,35 +47,35 @@ class Program
             await mqttClient.PublishAsync(message, CancellationToken.None);
         }
 
-        for (;;)
+        for (; ; )
         {
             foreach (var guid in _guids)
-            { 
+            {
                 var newMoisture = Math.Clamp(guid.Value + random.Next(-1, 2), 0, 100);
-                
+
                 _guids[guid.Key] = newMoisture;
-                
-                var json = JsonConvert.SerializeObject(new { clientid = guid.Key, timestamp = DateTime.Now, Moisture = newMoisture});
+
+                var json = JsonConvert.SerializeObject(new { clientid = guid.Key, timestamp = DateTime.Now, Moisture = newMoisture });
 
                 var message = new MqttApplicationMessageBuilder()
                     .WithTopic("water")
                     .WithPayload(json)
                     .Build();
-                    
+
                 await mqttClient.PublishAsync(message, CancellationToken.None);
             }
 
             Console.WriteLine("MQTT application message is published.");
-            Thread.Sleep(20000);
+            Thread.Sleep(1000);
         }
     }
-    
+
     private static async Task ConsumePublishedMessage(MqttApplicationMessageReceivedEventArgs e)
     {
         var message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-        
+
         if (!_guids.ContainsKey(Guid.Parse(e.ApplicationMessage.Topic))) return;
-        
-        Console.WriteLine("Binding key is: " + message);
+
+        Console.WriteLine("Device " + e.ApplicationMessage.Topic + ": Binding key is: " + message + " - WARNING THESE CODES RETURN ONLY ONCE FROM BACKEND");
     }
 }

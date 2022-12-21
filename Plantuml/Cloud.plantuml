@@ -1,4 +1,4 @@
-@startuml kubernetes
+@startuml Cloud_Cluster_Diagram
 
 footer Kubernetes Components for User Flow
 scale max 1024 width

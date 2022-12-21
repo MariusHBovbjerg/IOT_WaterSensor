@@ -1,0 +1,12 @@
+@startuml system_context
+!include <C4/C4_Container>
+
+left footer "  C4 - System Context Diagram - IOT Plant Monitoring System"
+
+Person(User, "User")
+
+System(System, "Plant Monitoring System", "Website, api and devices")
+
+Rel(User, System, "Can add new plants and view plant data")
+
+@enduml

@@ -1,4 +1,4 @@
-@startuml kubernetes
+@startuml Dependency_Diagram
 
 footer Kubernetes Service expansion
 scale max 1024 width
